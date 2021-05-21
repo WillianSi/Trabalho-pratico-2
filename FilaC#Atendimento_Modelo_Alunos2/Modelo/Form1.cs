@@ -102,13 +102,13 @@ namespace Modelo
         void mostra()
         {
             listNormal.Items.Clear();
-            foreach(Pessoa s in filaNormal)
+            foreach(Pessoa s in filaNormal)// mostra no lisNormal
             {
                 listNormal.Items.Add(s.Nome + " - Idade:" +  s.Idade);
             }
 
             listPref.Items.Clear();
-            foreach (Pessoa s in filaPref)
+            foreach (Pessoa s in filaPref)// mostra no lisPref
             {
                 listPref.Items.Add(s.Nome + " - Idade:" + s.Idade);
             }
@@ -130,17 +130,17 @@ namespace Modelo
             p.Idade = Convert.ToInt32(txtIdade.Text);
             p.Rg = Convert.ToInt32(txtRG.Text);
             
-            if(p.Idade >= 60)
+            if(p.Idade >= 60)// add na filaPref se for >= 60
             {
                 filaPref.Enqueue(p);
             }
-            else
+            else// add na filaNormal se for < 60
             {
                 filaNormal.Enqueue(p);
             }
 
-            mostra();
-            limpa();
+            mostra();// atualiza a fila
+            limpa();// limpa os texbox
         }
 
         void removePref()
@@ -156,32 +156,37 @@ namespace Modelo
         private void btnRemove_Click(object sender, EventArgs e)
         {
 
-            while(filaPref.Count >= 0 && filaPref.Count >= 0)
+            while(filaPref.Count >= 0 && filaNormal.Count >= 0)
             {
                 Pessoa p = new Pessoa();
-                Pessoa n = new Pessoa();
 
-                if (cont < 3 && filaPref.Count > 0)
+                if (filaPref.Count == 0 && filaNormal.Count == 0)
                 {
-                    p = filaPref.Peek();
+                    MessageBox.Show("Filas vazias !");
+                    break;
+
+                }
+
+                if (cont < 3 && filaPref.Count > 0)// remove da filaPref se o cont for < que 3 e tiver pessoas cadastradas
+                {
+                    p = filaPref.Peek();// topo da fila
                     removePref();
                     lblProx.Text = p.Nome;
-                    mostra();
-                    cont++;
+                    mostra();// atualiza a fila
+                    cont++;// add +1 ao contador
                     break;
                 }
-                
-                else
+
+                else// remove da filaNolmal se o cont for >= que 3 e tiver não pessoas cadastradas na filaPref
                 { 
-                    n = filaNormal.Peek();
+                    p = filaNormal.Peek();// topo da fila
                     removeNormal();
-                    lblProx.Text = n.Nome;
-                    mostra();
-                    cont = 0;
-                    break;               
+                    lblProx.Text = p.Nome;
+                    mostra();// atualiza a fila
+                    cont = 0;// zera o contador
+                    break;
                 }
             }
-
         }
 
         private void btnSave_Click(object sender, EventArgs e)
